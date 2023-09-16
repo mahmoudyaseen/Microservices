@@ -1,0 +1,9 @@
+docker build -t mahmoudyaseen/service_name .
+docker run -p 8080:80 -d mahmoudyaseen/Service_name
+docker ps
+
+kubectl get deployments
+kubectl get pods
+kubectl apply -f file.yaml
+kubectl delete deployments deployment_name
+kubectl get services
