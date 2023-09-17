@@ -1,6 +1,16 @@
+using FluentValidation;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+// builder.Services.AddDbContext<AppDbContext>(options =>
+// {
+//     options.UseInMemoryDatabase("PlatformDb");
+// });
+
+builder.Services.AddAutoMapper(typeof(Program).Assembly);
+
+builder.Services.AddValidatorsFromAssemblyContaining(typeof(Program));
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

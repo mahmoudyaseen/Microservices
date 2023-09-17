@@ -4,22 +4,29 @@ using Microsoft.AspNetCore.Mvc;
 using PlatformService.Data;
 using PlatformService.Dtos;
 using PlatformService.Model;
+using PlatformService.SyncDataServices.Http;
 
 namespace PlatformService.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class PlatformController : ControllerBase
+public class PlatformsController : ControllerBase
 {
     private readonly IPlatformRepo platformRepo;
     private readonly IMapper mapper;
     private readonly IValidator<PlatformCreateDto> createValidator;
+    private readonly ICommandDataClient commandDataClient;
 
-    public PlatformController(IPlatformRepo platformRepo, IMapper mapper, IValidator<PlatformCreateDto> createValidator)
+    public PlatformsController(
+        IPlatformRepo platformRepo,
+        IMapper mapper,
+        IValidator<PlatformCreateDto> createValidator,
+        ICommandDataClient commandDataClient)
     {
         this.platformRepo = platformRepo;
         this.mapper = mapper;
         this.createValidator = createValidator;
+        this.commandDataClient = commandDataClient;
     }
 
     [HttpGet]
@@ -54,6 +61,15 @@ public class PlatformController : ControllerBase
         await platformRepo.SaveChangesAsync();
 
         var result = mapper.Map<PlatformReadDto>(platform);
+
+        try
+        {
+            await commandDataClient.SendPlatformToCommand(result);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"===> can't send creation syncronosly: {ex.Message}");
+        }
 
         return CreatedAtRoute(nameof(GetPlatformsByIdAsync), new { result.Id }, result);
     }

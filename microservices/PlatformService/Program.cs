@@ -2,6 +2,7 @@ using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using PlatformService.Data;
+using PlatformService.SyncDataServices.Http;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +18,8 @@ builder.Services.AddValidatorsFromAssemblyContaining(typeof(Program));
 
 builder.Services.AddScoped<IPlatformRepo, PlatformRepo>();
 
+builder.Services.AddHttpClient<ICommandDataClient, HttpCommandDataClient>();
+
 builder.Services.AddControllers();
 
 // builder.Services.AddFluentValidationAutoValidation(opt =>
@@ -29,6 +32,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+Console.WriteLine($"Command service url is: {app.Configuration["CommandService"]}");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
