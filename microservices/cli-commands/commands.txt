@@ -3,10 +3,20 @@ docker push mahmoudyaseen/service_name
 docker run -p 8080:80 -d mahmoudyaseen/Service_name
 docker ps
 
+kubectl get namespaces
+kubectl get pods --namespace=ingress-nginx
 kubectl get deployments
 kubectl get pods
 kubectl get services
+kubectl get storageclass
+kubectl get pvc // get persistence volumes claims
 kubectl apply -f file.yaml
 kubectl delete deployments deployment_name
 
 kubectl rollout restart deployment platforms-depl // get the latest version of images 
+
+// get nginx loadbalancer for kubernates
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.8.2/deploy/static/provider/cloud/deploy.yaml
+
+kubectl create secret generic mssql --from-literal=SA_PASSWORD="pa55w0rd!"
+kubectl get secrets
