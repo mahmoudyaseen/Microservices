@@ -1,18 +1,24 @@
+using CommandsService.Data;
 using FluentValidation;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-// builder.Services.AddDbContext<AppDbContext>(options =>
-// {
-//     options.UseInMemoryDatabase("PlatformDb");
-// });
+builder.Services.AddDbContext<AppDbContext>(options =>
+{
+    options.UseInMemoryDatabase("CommandDb");
+});
+
+builder.Services.AddScoped<ICommandRepo, CommandRepo>();
 
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
 builder.Services.AddValidatorsFromAssemblyContaining(typeof(Program));
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .ConfigureApiBehaviorOptions(opts => opts.SuppressModelStateInvalidFilter = true);
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

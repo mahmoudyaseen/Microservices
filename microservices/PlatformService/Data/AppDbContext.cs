@@ -11,6 +11,8 @@ public class AppDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        Console.WriteLine("on model creating");
+
         modelBuilder.SeedInitialData();
 
         base.OnModelCreating(modelBuilder);
