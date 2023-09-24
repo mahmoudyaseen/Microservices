@@ -24,6 +24,10 @@ public class CommandRepo : ICommandRepo
     {
         return await context.Platforms.AnyAsync(p => p.Id == platformId);
     }
+    public async Task<bool> IsExternalPlatformExistsAsync(int platformExternalId)
+    {
+        return await context.Platforms.AnyAsync(p => p.ExternalId == platformExternalId);
+    }
 
     public async Task<List<Command>> GetCommandsForPlatformAsync(int platformId)
     {
