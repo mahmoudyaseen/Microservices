@@ -1,6 +1,7 @@
 using CommandsService.AsyncDataServices;
 using CommandsService.Data;
 using CommandsService.EventProcessing;
+using CommandsService.SyncDataServices.Grpc;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,6 +16,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddScoped<ICommandRepo, CommandRepo>();
 
 builder.Services.AddSingleton<IEventProcessor, EventProcessor>();
+
+builder.Services.AddScoped<IPlatformDataClient, PlatformDataClient>();
 
 builder.Services.AddHostedService<MessageBusSubscriber>();
 
@@ -43,5 +46,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+await app.SeedDbAsync();
 
 app.Run();
